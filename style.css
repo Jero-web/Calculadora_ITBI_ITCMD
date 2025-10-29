@@ -1,0 +1,146 @@
+/* ==================================== */
+/* BASE E RESPONSIVIDADE DE ALTURA */
+/* ==================================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f9;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinha ao topo para evitar rolagem do body */
+    min-height: 100vh;
+    height: 100vh;
+    margin: 0;
+    padding: 10px; 
+    box-sizing: border-box; 
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 650px; /* Aumentado a largura para acomodar 2 colunas */
+    width: 100%;
+    
+    /* CHAVE: Rola o conteúdo interno se for muito alto */
+    max-height: calc(100vh - 20px); /* 100% da altura da tela menos o padding do body */
+    overflow-y: auto; 
+}
+
+/* ==================================== */
+/* LAYOUT DE COLUNAS (LADO A LADO) */
+/* ==================================== */
+
+.input-row {
+    display: flex; /* Habilita o layout lado a lado */
+    gap: 20px; /* Espaço entre as colunas */
+    margin-bottom: 20px;
+}
+
+.input-row .form-group {
+    flex: 1; /* Faz com que ambos os grupos ocupem o mesmo espaço */
+    margin-bottom: 0; /* O espaçamento vertical agora é controlado pelo margin-bottom do .input-row */
+}
+
+/* ==================================== */
+/* ESTILOS GERAIS */
+/* ==================================== */
+h1 { color: #333; font-size: 24px; margin-bottom: 5px; text-align: center; }
+h2 { color: #555; font-size: 18px; margin-top: 25px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+p { color: #777; text-align: center; margin-bottom: 25px; font-size: 14px; }
+hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+label { display: block; margin-bottom: 8px; color: #444; font-weight: 600; font-size: 14px; }
+
+input[type="text"], 
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+/* Estilo da caixa de resultado (Total) */
+.result-box {
+    margin-top: 30px;
+    padding: 15px;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    background-color: #e2f5e7;
+}
+
+.result-box label {
+    color: #28a745;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.result-box input[type="text"] {
+    font-size: 20px;
+    font-weight: bold;
+    color: #28a745;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: default;
+}
+
+/* Estilo do botão de calcular */
+.form-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#total1 {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+#total1:hover { background-color: #0056b3; }
+
+/* Campos automáticos */
+#registro, #notas {
+    background-color: #f8f9fa;
+}
+
+
+/* ==================================== */
+/* MEDIA QUERY: TELA PEQUENA (SMARTPHONE) */
+/* ==================================== */
+
+@media (max-width: 600px) {
+    /* Força o empilhamento vertical (uma coluna) */
+    .input-row {
+        flex-direction: column; 
+        gap: 0; /* Remove o espaço lateral entre eles */
+    }
+    
+    /* Adiciona margem de volta entre os grupos quando empilhados */
+    .input-row .form-group {
+        margin-bottom: 15px;
+    }
+    
+    /* Outros ajustes de espaço para telas muito pequenas */
+    .container {
+        padding: 15px;
+    }
+    h1 { font-size: 22px; }
+    p { margin-bottom: 20px; }
+    hr { margin: 25px 0; }
+}

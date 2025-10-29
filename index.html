@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css"> 
+    <title>Cálculo de Encargos Imobiliários</title> 
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Encargos</h1>
+        <p>Insira o valor do imóvel e a alíquota para calcular.</p>
+        
+        <form id="calculatorForm">
+            
+            <div class="input-row">
+                <div class="form-group">
+                    <label for="valorImovel">Valor do Imóvel (R$):</label>
+                    <input type="text" id="valorImovel" name="valorImovel" class="currency-input" 
+                           oninput="formatCurrency(this); autocompleteRegistro();" placeholder="Ex: 500.000,00" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="percentual">Alíquota de Imposto (%):</label>
+                    <input type="number" id="percentual" name="percentual" step="0.01" value="2.0" required>
+                </div>
+            </div>
+            
+            <hr>
+
+            <h2>Encargos Cartório de Notas e de Registro de Imóveis</h2>
+
+            <div class="input-row">
+                <div class="form-group">
+                    <label for="registro">Registro/Escritura (R$):</label>
+                    <input type="text" id="registro" name="registro" class="currency-input" required readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="notas">Valor de Notas (R$):</label>
+                    <input type="text" id="notas" name="notas" class="currency-input" required readonly>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="total1" onclick="calc()">CALCULAR TOTAL</button> 
+            </div>
+
+            <div class="result-box">
+                <label for="total">Total de Encargos (R$):</label>
+                <input type="text" id="total" readonly placeholder="R$ 0,00">
+            </div>
+        </form>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
