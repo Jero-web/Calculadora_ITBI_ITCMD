@@ -3,132 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Legal de Partilha + ITCMD/SE</title>
     <link rel="stylesheet" href="style.css"> 
-    <script src="script.js"></script>
+    <title>Cálculo de Encargos Imobiliários</title> 
 </head>
 <body>
-
     <div class="container">
-        <h1>⚖️ Simulador Legal de Partilha + ITCMD/SE</h1>
-        <p class="alerta">⚠️ **Atenção:** Esta simulação de ITCMD/SE utiliza alíquotas didáticas progressivas. O cálculo oficial deve ser feito com a UFP/SE atualizada e a legislação específica da SEFAZ/SE.</p>
-
-        <fieldset>
-            <legend>1️⃣ Sobrevivente e Regime de Bens</legend>
+        <h1>Calculadora de Encargos</h1>
+        <p>Insira o valor do imóvel e a alíquota para calcular.</p>
+        
+        <form id="calculatorForm">
             
-            <label for="nomeSobrevivente">👤 Nome do Cônjuge/Companheiro(a) Sobrevivente:</label>
-            <input type="text" id="nomeSobrevivente" value="Viúvo(a) Sobrevivente">
-            
-            <label for="tipoRelacao">👥 Relação do Sobrevivente:</label>
-            <select id="tipoRelacao">
-                <option value="conjuge">Cônjuge (Casamento)</option>
-                <option value="companheiro">Companheiro(a) (União Estável)</option>
-            </select>
-            
-            <label for="regimeBens">🏛️ Regime de Bens (ou aplicável à União Estável):</label>
-            <select id="regimeBens" onchange="exibirAlertaRegime()">
-                <option value="parcial">Comunhão Parcial de Bens</option>
-                <option value="universal">Comunhão Universal de Bens</option>
-                <option value="separacao">Separação Total de Bens (Convencional)</option>
-                <option value="separacao-obrigatoria">Separação Obrigatória de Bens (Art. 1641)</option>
-            </select>
-        </fieldset>
+            <div class="input-row">
+                <div class="form-group">
+                    <label for="valorImovel">Valor do Imóvel (R$):</label>
+                    <input type="text" id="valorImovel" name="valorImovel" class="currency-input" 
+                           oninput="formatCurrency(this); autocompleteRegistro();" placeholder="Ex: 500.000,00" required>
+                </div>
 
-        <fieldset>
-            <legend>2️⃣ Patrimônio (Espólio) e Dívidas</legend>
-            
-            <p id="alertaRegime" class="alerta-regime">
-                ℹ️ **Atenção ao Regime:** Alerta dinâmico aparecerá aqui (Separação ou Universal).
-            </p>
-
-            <label for="bensComuns">💰 Bens Comuns (Aquestos - R$):</label>
-            <div class="input-moeda-container">
-                <span class="input-moeda-prefix">R$</span>
-                <input type="text" id="bensComuns" value="300000,00" class="input-valor" onfocus="desformatarInput(this)" onblur="formatarInput(this)">
-            </div>
-
-            <label for="bensParticulares">💎 Bens Particulares (do Falecido - R$):</label>
-            <div class="input-moeda-container">
-                <span class="input-moeda-prefix">R$</span>
-                <input type="text" id="bensParticulares" value="200000,00" class="input-valor" onfocus="desformatarInput(this)" onblur="formatarInput(this)">
+                <div class="form-group">
+                    <label for="percentual">Alíquota de Imposto (%):</label>
+                    <input type="number" id="percentual" name="percentual" step="0.01" value="2.0" required>
+                </div>
             </div>
             
-            <label for="dividas">📉 Dívidas e Passivo (a serem abatidos - R$):</label>
-            <div class="input-moeda-container">
-                <span class="input-moeda-prefix">R$</span>
-                <input type="text" id="dividas" value="50000,00" class="input-valor" onfocus="desformatarInput(this)" onblur="formatarInput(this)">
+            <hr>
+
+            <h2>Encargos Cartório de Notas e de Registro de Imóveis</h2>
+
+            <div class="input-row">
+                <div class="form-group">
+                    <label for="registro">Registro/Escritura (R$):</label>
+                    <input type="text" id="registro" name="registro" class="currency-input" required readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="notas">Valor de Notas (R$):</label>
+                    <input type="text" id="notas" name="notas" class="currency-input" required readonly>
+                </div>
             </div>
-        </fieldset>
 
-        <fieldset>
-            <legend>3️⃣ Herdeiros e Árvore Familiar</legend>
-            
-            <label for="numDescComuns">👶 Quantidade de Filhos Comuns (do Casal/União):</label>
-            <input type="number" id="numDescComuns" value="1" min="0" onchange="gerarCamposNomes()">
-
-            <label for="numDescExclusivos">👨‍👧 Quantidade de Filhos Exclusivos (apenas do Falecido):</label>
-            <input type="number" id="numDescExclusivos" value="1" min="0" onchange="gerarCamposNomes()">
-            
-            <div id="nomesDescendentes" class="herdeiros-dinamicos">
-                <p>Insira a quantidade de descendentes para gerar os campos de nome.</p>
+            <div class="form-actions">
+                <button type="button" id="total1" onclick="calc()">CALCULAR TOTAL</button> 
             </div>
-            
-            <hr style="border-top: 1px dashed #dcdcdc; margin: 20px 0;">
 
-            <label for="paisVivos">👴 Há Ascendentes Vivos (Pais/Avós)? (Caso não haja descendentes)</label>
-            <select id="paisVivos">
-                <option value="0">Nenhum (Próxima Classe: Cônjuge)</option>
-                <option value="1">Um (Pai OU Mãe)</option>
-                <option value="2">Dois (Pai E Mãe)</option>
-            </select>
-
-            <label for="numColaterais">👫 Quantidade de Irmãos Vivos (Colaterais): (Caso não haja ascendentes/cônjuge)</label>
-            <input type="number" id="numColaterais" value="0" min="0" onchange="gerarCamposNomes()">
-            
-            <div id="nomesColaterais" class="herdeiros-dinamicos">
-                 <p>Insira a quantidade de irmãos para gerar os campos de nome.</p>
+            <div class="result-box">
+                <label for="total">Total de Encargos (R$):</label>
+                <input type="text" id="total" readonly placeholder="R$ 0,00">
             </div>
-        </fieldset>
-
-        <button onclick="calcularPartilhaCompleta()">✅ CALCULAR A PARTILHA POR PORCENTAGEM</button>
-
-        <div id="resultado">
-            
-            <h3>1. Distribuição de Bens (Meação e Herança)</h3>
-            <p id="infoDeducoes" class="info-patrimonio"></p>
-            <p id="infoPatrimonio" class="info-patrimonio"></p>
-            <p id="infoHeranca" class="info-patrimonio"></p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Envolvido</th>
-                        <th>Tipo de Direito</th>
-                        <th>Quinhão (R$)</th>
-                        <th>% do Total Bruto</th>
-                        <th>ITCMD: Valor Tributável</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaCorpo">
-                    </tbody>
-            </table>
-
-            <h3 style="margin-top: 30px;">2. Cálculo do ITCMD/SE (Imposto de Transmissão)</h3>
-            <p class="alerta">ITCMD é devido **apenas** sobre o valor da **HERANÇA** (não sobre a Meação).</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="background-color: #dc3545;">Beneficiário</th>
-                        <th style="background-color: #dc3545;">Quinhão Tributável (Herança R$)</th>
-                        <th style="background-color: #dc3545;">Alíquota ITCMD/SE (Simulada)</th>
-                        <th style="background-color: #dc3545;">Imposto Devido (R$)</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaITCMD">
-                    </tbody>
-            </table>
-            <p id="totalImposto" class="total-imposto info-patrimonio"></p>
-        </div>
+        </form>
     </div>
-
+    
+    <script src="script.js"></script>
 </body>
 </html>
