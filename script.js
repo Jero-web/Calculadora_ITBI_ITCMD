@@ -1,718 +1,469 @@
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        // Assume-se que 'total1' é o ID do botão que chama a função calc
-        document.getElementById('total1').click(); 
-    }
-});
+        // --- FUNÇÕES DE FORMATAÇÃO BRL ---
 
+        function formatarBRL(valor) {
+            valor = parseFloat(valor);
+            if (isNaN(valor)) return 'R$ 0,00';
+            
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(valor);
+        }
 
-// Função auxiliar CORRIGIDA para obter o valor numérico a partir do input formatado em Reais (R$ 1.000.000,00)
-function parseCurrency(value) {
-    if (!value) {
-        return 0;
-    }
-    const cleanedValue = value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
-    return parseFloat(cleanedValue) || 0;
-}
+        function desformatarBRL(texto) {
+            if (typeof texto === 'string') {
+                texto = texto.replace(/[R$ ]/g, ''); 
+                texto = texto.replace(/\./g, '');    
+                texto = texto.replace(/,/g, '.');    
+            }
+            return parseFloat(texto) || 0;
+        }
+        
+        function formatarInput(inputElement) {
+            let valor = desformatarBRL(inputElement.value);
+            inputElement.value = new Intl.NumberFormat('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(valor).replace('R$', '').trim();
+        }
+        
+        function desformatarInput(inputElement) {
+            let valor = desformatarBRL(inputElement.value);
+            inputElement.value = valor.toFixed(2).replace('.', ','); 
+            inputElement.select(); 
+        }
+        
+        // --- LÓGICA DO SIMULADOR ---
+        
+       // A função de alerta será ajustada no script para garantir a legibilidade.
 
-
-// Função para formatar o valor em formato de moeda
-function formatCurrency(input) {
-    let value = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-    if (value) {
-        value = parseFloat(value) / 100;
-        input.value = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    } else {
-        input.value = '';
-    }
-}
-
-// Função para autocompletar o valor do registro com base no valor do imóvel
-function autocompleteRegistro() {
-    // CORREÇÃO APLICADA: Usando a nova função parseCurrency para garantir a leitura correta de 1.000.000,00
-    let valorImovel = parseCurrency(document.getElementById('valorImovel').value);
-
-    let valorRegistro;
-    switch (true) {
-        case (valorImovel <= 5999.99):
-            valorRegistro = 346.94;
-            break;
-        case (valorImovel <= 12999.99):
-            valorRegistro = 587.24;
-            break;
-        case (valorImovel <= 25000.00):
-            valorRegistro = 810.98;
-            break;
-        case (valorImovel <= 30000.00):
-            valorRegistro = 864.86;
-            break;
-        case (valorImovel <= 35000.00):
-            valorRegistro = 918.74;
-            break;
-        case (valorImovel <= 40000.00):
-            valorRegistro = 972.62;
-            break;
-        case (valorImovel <= 45000.00):
-            valorRegistro = 1026.50;
-            break;
-        case (valorImovel <= 50000.00):
-            valorRegistro = 1080.38;
-            break;
-        case (valorImovel <= 55000.00):
-            valorRegistro = 1134.26;
-            break;
-        case (valorImovel <= 60000.00):
-            valorRegistro = 1188.14;
-            break;
-        case (valorImovel <= 65000.00):
-            valorRegistro = 1242.02;
-            break;
-        case (valorImovel <= 70000.00):
-            valorRegistro = 1295.90;
-            break;
-        case (valorImovel <= 75000.00):
-            valorRegistro = 1349.78;
-            break;
-        case (valorImovel <= 80000.00):
-            valorRegistro = 1403.66;
-            break;
-        case (valorImovel <= 85000.00):
-            valorRegistro = 1457.54;
-            break;
-        case (valorImovel <= 90000.00):
-            valorRegistro = 1511.42;
-            break;
-        case (valorImovel <= 95000.00):
-            valorRegistro = 1565.30;
-            break;
-        case (valorImovel <= 100000.00):
-            valorRegistro = 1619.18;
-            break;
-        case (valorImovel <= 105000.00):
-            valorRegistro = 1673.06;
-            break;
-        case (valorImovel <= 110000.00):
-            valorRegistro = 1726.94;
-            break;
-        case (valorImovel <= 115000.00):
-            valorRegistro = 1780.82;
-            break;
-        case (valorImovel <= 120000.00):
-            valorRegistro = 1834.70;
-            break;
-        case (valorImovel <= 125000.00):
-            valorRegistro = 1888.58;
-            break;
-        case (valorImovel <= 130000.00):
-            valorRegistro = 1942.46;
-            break;
-        case (valorImovel <= 135000.00):
-            valorRegistro = 1996.34;
-            break;
-        case (valorImovel <= 140000.00):
-            valorRegistro = 2050.22;
-            break;
-        case (valorImovel <= 145000.00):
-            valorRegistro = 2104.10;
-            break;
-        case (valorImovel <= 150000.00):
-            valorRegistro = 2157.98;
-            break;
-        case (valorImovel <= 155000.00):
-            valorRegistro = 2211.86;
-            break;
-        case (valorImovel <= 160000.00):
-            valorRegistro = 2265.74;
-            break;
-        case (valorImovel <= 165000.00):
-            valorRegistro = 2319.62;
-            break;
-        case (valorImovel <= 170000.00):
-            valorRegistro = 2373.50;
-            break;
-        case (valorImovel <= 175000.00):
-            valorRegistro = 2427.38;
-            break;
-        case (valorImovel <= 180000.00):
-            valorRegistro = 2481.26;
-            break;
-        case (valorImovel <= 185000.00):
-            valorRegistro = 2535.14;
-            break;
-        case (valorImovel <= 190000.00):
-            valorRegistro = 2589.02;
-            break;
-        case (valorImovel <= 195000.00):
-            valorRegistro = 2642.90;
-            break;
-        case (valorImovel <= 200000.00):
-            valorRegistro = 2696.78;
-            break;
-        case (valorImovel <= 205000.00):
-            valorRegistro = 2750.66;
-            break;
-        case (valorImovel <= 210000.00):
-            valorRegistro = 2804.54;
-            break;
-        case (valorImovel <= 215000.00):
-            valorRegistro = 2858.42;
-            break;
-        case (valorImovel <= 220000.00):
-            valorRegistro = 2912.30;
-            break;
-        case (valorImovel <= 225000.00):
-            valorRegistro = 2966.18;
-            break;
-        case (valorImovel <= 230000.00):
-            valorRegistro = 3020.06;
-            break;
-        case (valorImovel <= 235000.00):
-            valorRegistro = 3073.94;
-            break;
-        case (valorImovel <= 240000.00):
-            valorRegistro = 3127.82;
-            break;
-        case (valorImovel <= 245000.00):
-            valorRegistro = 3181.70;
-            break;
-        case (valorImovel <= 250000.00):
-            valorRegistro = 3235.58;
-            break;
-        case (valorImovel <= 255000.00):
-            valorRegistro = 3289.46;
-            break;
-        case (valorImovel <= 260000.00):
-            valorRegistro = 3343.34;
-            break;
-        case (valorImovel <= 265000.00):
-            valorRegistro = 3397.22;
-            break;
-        case (valorImovel <= 270000.00):
-            valorRegistro = 3451.10;
-            break;
-        case (valorImovel <= 275000.00):
-            valorRegistro = 3504.98;
-            break;
-        case (valorImovel <= 280000.00):
-            valorRegistro = 3558.86;
-            break;
-        case (valorImovel <= 285000.00):
-            valorRegistro = 3612.74;
-            break;
-        case (valorImovel <= 290000.00):
-            valorRegistro = 3666.62;
-            break;
-        case (valorImovel <= 295000.00):
-            valorRegistro = 3720.50;
-            break;
-        case (valorImovel <= 300000.00):
-            valorRegistro = 3774.38;
-            break;
-        case (valorImovel <= 305000.00):
-            valorRegistro = 3828.26;
-            break;
-        case (valorImovel <= 310000.00):
-            valorRegistro = 3882.14;
-            break;
-        case (valorImovel <= 315000.00):
-            valorRegistro = 3936.02;
-            break;
-        case (valorImovel <= 320000.00):
-            valorRegistro = 3989.90;
-            break;
-        case (valorImovel <= 325000.00):
-            valorRegistro = 4043.78;
-            break;
-        case (valorImovel <= 330000.00):
-            valorRegistro = 4097.66;
-            break;
-        case (valorImovel <= 335000.00):
-            valorRegistro = 4151.54;
-            break;
-        case (valorImovel <= 340000.00):
-            valorRegistro = 4205.42;
-            break;
-        case (valorImovel <= 345000.00):
-            valorRegistro = 4259.30;
-            break;
-        case (valorImovel <= 350000.00):
-            valorRegistro = 4313.18;
-            break;
-        case (valorImovel <= 355000.00):
-            valorRegistro = 4367.06;
-            break;
-        case (valorImovel <= 360000.00):
-            valorRegistro = 4420.94;
-            break;
-        case (valorImovel <= 365000.00):
-            valorRegistro = 4474.82;
-            break;
-        case (valorImovel <= 370000.00):
-            valorRegistro = 4528.70;
-            break;
-        case (valorImovel <= 375000.00):
-            valorRegistro = 4582.58;
-            break;
-        case (valorImovel <= 380000.00):
-            valorRegistro = 4636.46;
-            break;
-        case (valorImovel <= 385000.00):
-            valorRegistro = 4690.34;
-            break;
-        case (valorImovel <= 390000.00):
-            valorRegistro = 4744.22;
-            break;
-        case (valorImovel <= 395000.00):
-            valorRegistro = 4798.10;
-            break;
-        case (valorImovel <= 400000.00):
-            valorRegistro = 4851.98;
-            break;
-        case (valorImovel <= 405000.00):
-            valorRegistro = 4905.86;
-            break;
-        case (valorImovel <= 410000.00):
-            valorRegistro = 4959.74;
-            break;
-        case (valorImovel <= 415000.00):
-            valorRegistro = 5013.62;
-            break;
-        case (valorImovel <= 420000.00):
-            valorRegistro = 5067.50;
-            break;
-        case (valorImovel <= 425000.00):
-            valorRegistro = 5121.38;
-            break;
-        case (valorImovel <= 430000.00):
-            valorRegistro = 5175.26;
-            break;
-        case (valorImovel <= 435000.00):
-            valorRegistro = 5229.14;
-            break;
-        case (valorImovel <= 440000.00):
-            valorRegistro = 5283.02;
-            break;
-        case (valorImovel <= 445000.00):
-            valorRegistro = 5336.90;
-            break;
-        case (valorImovel <= 450000.00):
-            valorRegistro = 5390.78;
-            break;
-        case (valorImovel <= 455000.00):
-            valorRegistro = 5444.66;
-            break;
-        case (valorImovel <= 460000.00):
-            valorRegistro = 5498.54;
-            break;
-        case (valorImovel <= 465000.00):
-            valorRegistro = 5552.42;
-            break;
-        case (valorImovel <= 470000.00):
-            valorRegistro = 5606.30;
-            break;
-        case (valorImovel <= 475000.00):
-            valorRegistro = 5660.18;
-            break;
-        case (valorImovel <= 480000.00):
-            valorRegistro = 5714.06;
-            break;
-        case (valorImovel <= 485000.00):
-            valorRegistro = 5767.94;
-            break;
-        case (valorImovel <= 490000.00):
-            valorRegistro = 5821.82;
-            break;
-        case (valorImovel <= 495000.00):
-            valorRegistro = 5875.70;
-            break;
-        case (valorImovel <= 500000.00):
-            valorRegistro = 5929.58;
-            break;
-        case (valorImovel <= 505000.00):
-            valorRegistro = 5983.46;
-            break;
-        case (valorImovel <= 510000.00):
-            valorRegistro = 6037.34;
-            break;
-        case (valorImovel <= 515000.00):
-            valorRegistro = 6091.22;
-            break;
-        case (valorImovel <= 520000.00):
-            valorRegistro = 6145.10;
-            break;
-        case (valorImovel <= 525000.00):
-            valorRegistro = 6198.98;
-            break;
-        case (valorImovel <= 530000.00):
-            valorRegistro = 6252.86;
-            break;
-        case (valorImovel <= 535000.00):
-            valorRegistro = 6306.74;
-            break;
-        case (valorImovel <= 540000.00):
-            valorRegistro = 6360.62;
-            break;
-        case (valorImovel <= 545000.00):
-            valorRegistro = 6414.50;
-            break;
-        case (valorImovel <= 550000.00):
-            valorRegistro = 6468.38;
-            break;
-        case (valorImovel <= 555000.00):
-            valorRegistro = 6522.26;
-            break;
-        case (valorImovel <= 560000.00):
-            valorRegistro = 6576.14;
-            break;
-        case (valorImovel <= 565000.00):
-            valorRegistro = 6630.02;
-            break;
-        case (valorImovel <= 570000.00):
-            valorRegistro = 6683.90;
-            break;
-        case (valorImovel <= 575000.00):
-            valorRegistro = 6737.78;
-            break;
-        case (valorImovel <= 580000.00):
-            valorRegistro = 6803.66;
-            break;
-        case (valorImovel <= 585000.00):
-            valorRegistro = 6845.54;
-            break;
-        case (valorImovel <= 590000.00):
-            valorRegistro = 6899.42;
-            break;
-        case (valorImovel <= 595000.00):
-            valorRegistro = 6953.30;
-            break;
-        case (valorImovel <= 600000.00):
-            valorRegistro = 7007.18;
-            break;
-        case (valorImovel <= 605000.00):
-            valorRegistro = 7061.06;
-            break;
-        case (valorImovel <= 610000.00):
-            valorRegistro = 7114.94;
-            break;
-        case (valorImovel <= 615000.00):
-            valorRegistro = 7168.82;
-            break;
-        case (valorImovel <= 620000.00):
-            valorRegistro = 7222.70;
-            break;
-        case (valorImovel <= 625000.00):
-            valorRegistro = 7276.58;
-            break;
-        case (valorImovel <= 630000.00):
-            valorRegistro = 7330.46;
-            break;
-        case (valorImovel <= 635000.00):
-            valorRegistro = 7384.34;
-            break;
-        case (valorImovel <= 640000.00):
-            valorRegistro = 7438.22;
-            break;
-        case (valorImovel <= 645000.00):
-            valorRegistro = 7492.10;
-            break;
-        case (valorImovel <= 650000.00):
-            valorRegistro = 7545.98;
-            break;
-        case (valorImovel <= 655000.00):
-            valorRegistro = 7599.86;
-            break;
-        case (valorImovel <= 660000.00):
-            valorRegistro = 7653.74;
-            break;
-        case (valorImovel <= 665000.00):
-            valorRegistro = 7707.62;
-            break;
-        case (valorImovel <= 670000.00):
-            valorRegistro = 7761.50;
-            break;
-        case (valorImovel <= 675000.00):
-            valorRegistro = 7815.38;
-            break;
-        case (valorImovel <= 680000.00):
-            valorRegistro = 7869.26;
-            break;
-        case (valorImovel <= 685000.00):
-            valorRegistro = 7923.14;
-            break;
-        case (valorImovel <= 690000.00):
-            valorRegistro = 7977.02;
-            break;
-        case (valorImovel <= 695000.00):
-            valorRegistro = 8030.90;
-            break;
-        case (valorImovel <= 700000.00):
-            valorRegistro = 8084.78;
-            break;
-        case (valorImovel <= 705000.00):
-            valorRegistro = 8138.66;
-            break;
-        case (valorImovel <= 710000.00):
-            valorRegistro = 8192.54;
-            break;
-        case (valorImovel <= 715000.00):
-            valorRegistro = 8246.42;
-            break;
-        case (valorImovel <= 720000.00):
-            valorRegistro = 8300.30;
-            break;
-        case (valorImovel <= 725000.00):
-            valorRegistro = 8354.18;
-            break;
-        case (valorImovel <= 730000.00):
-            valorRegistro = 8408.06;
-            break;
-        case (valorImovel <= 735000.00):
-            valorRegistro = 8461.94;
-            break;
-        case (valorImovel <= 740000.00):
-            valorRegistro = 8515.82;
-            break;
-        case (valorImovel <= 745000.00):
-            valorRegistro = 8569.70;
-            break;
-        case (valorImovel <= 750000.00):
-            valorRegistro = 8623.58;
-            break;
-        case (valorImovel <= 755000.00):
-            valorRegistro = 8677.46;
-            break;
-        case (valorImovel <= 760000.00):
-            valorRegistro = 8731.34;
-            break;
-        case (valorImovel <= 765000.00):
-            valorRegistro = 8785.22;
-            break;
-        case (valorImovel <= 770000.00):
-            valorRegistro = 8839.10;
-            break;
-        case (valorImovel <= 775000.00):
-            valorRegistro = 8892.98;
-            break;
-        case (valorImovel <= 780000.00):
-            valorRegistro = 8946.86;
-            break;       
-        case (valorImovel <= 785000.00):
-            valorRegistro = 9000.74; 
-            break;
-        case (valorImovel <= 790000.00):
-            valorRegistro = 9054.62;
-            break;
-        case (valorImovel <= 795000.00):
-            valorRegistro = 9108.50;
-            break;
-        case (valorImovel <= 800000.00):
-            valorRegistro = 9162.38;
-            break;
-        case (valorImovel <= 805000.00):
-            valorRegistro = 9216.26;
-            break;
-        case (valorImovel <= 810000.00):
-            valorRegistro = 9270.14;
-            break;
-        case (valorImovel <= 815000.00):
-            valorRegistro = 9324.02;
-            break;
-        case (valorImovel <= 820000.00):
-            valorRegistro = 9377.90;
-            break;
-        case (valorImovel <= 825000.00):
-            valorRegistro = 9431.78;
-            break;
-        case (valorImovel <= 830000.00):
-            valorRegistro = 9485.66;
-            break;
-        case (valorImovel <= 835000.00):
-            valorRegistro = 9539.54;
-            break;
-        case (valorImovel <= 840000.00):
-            valorRegistro = 9593.42;
-            break;
-        case (valorImovel <= 845000.00):
-            valorRegistro = 9647.30;
-            break;
-        case (valorImovel <= 850000.00):
-            valorRegistro = 9701.18;
-            break;
-        case (valorImovel <= 855000.00):
-            valorRegistro = 9755.06;
-            break;
-        case (valorImovel <= 860000.00):
-            valorRegistro = 9808.94;
-            break;
-        case (valorImovel <= 865000.00):
-            valorRegistro = 9862.82;
-            break;
-        case (valorImovel <= 870000.00):
-            valorRegistro = 9916.70;
-            break;
-        case (valorImovel <= 875000.00):
-            valorRegistro = 9970.58;
-            break;
-        case (valorImovel <= 880000.00):
-            valorRegistro = 10024.46;
-            break;
-        case (valorImovel <= 885000.00):
-            valorRegistro = 10078.34;
-            break;
-        case (valorImovel <= 890000.00):
-            valorRegistro = 10132.22;
-            break;
-        case (valorImovel <= 895000.00):
-            valorRegistro = 10186.10;
-            break;
-        case (valorImovel <= 900000.00):
-            valorRegistro = 10239.98;
-            break;
-        case (valorImovel <= 905000.00):
-            valorRegistro = 10293.86;
-            break;
-        case (valorImovel <= 910000.00):
-            valorRegistro = 10347.74;
-            break;
-        case (valorImovel <= 915000.00):
-            valorRegistro = 10401.62;
-            break;
-        case (valorImovel <= 920000.00):
-            valorRegistro = 10455.50;
-            break;
-        case (valorImovel <= 925000.00):
-            valorRegistro = 10509.38;
-            break;
-        case (valorImovel <= 930000.00):
-            valorRegistro = 10563.26;
-            break;
-        case (valorImovel <= 935000.00):
-            valorRegistro = 10617.14;
-            break;
-        case (valorImovel <= 940000.00):
-            valorRegistro = 10671.02;
-            break;
-        case (valorImovel <= 945000.00):
-            valorRegistro = 10724.90;
-            break;
-        case (valorImovel <= 950000.00):
-            valorRegistro = 10778.78;
-            break;
-        case (valorImovel <= 955000.00):
-            valorRegistro = 10832.66;
-            break;
-        case (valorImovel <= 960000.00):
-            valorRegistro = 10886.54;
-            break;
-        case (valorImovel <= 965000.00):
-            valorRegistro = 10940.42;
-            break;
-        case (valorImovel <= 970000.00):
-            valorRegistro = 10994.30;
-            break;
-        case (valorImovel <= 975000.00):
-            valorRegistro = 11048.18;
-            break;
-        case (valorImovel <= 980000.00):
-            valorRegistro = 11102.06;
-            break;
-        case (valorImovel <= 985000.00):
-            valorRegistro = 11155.94;
-            break;
-        case (valorImovel <= 990000.00):
-            valorRegistro = 11209.82;
-            break;
-        case (valorImovel <= 995000.00):
-            valorRegistro = 11263.70;
-            break;
-        case (valorImovel <= 1000000.00):
-            valorRegistro = 11317.58;
-            break;
-        case (valorImovel <= 1005000.00):
-            valorRegistro = 11371.46;
-            break;
-        case (valorImovel <= 1010000.00):
-            valorRegistro = 11425.34;
-            break;
-        case (valorImovel <= 1015000.00):
-            valorRegistro = 11479.22;
-            break;
-        case (valorImovel <= 1020000.00):
-            valorRegistro = 11533.10;
-            break;
-        case (valorImovel <= 1025000.00):
-            valorRegistro = 11586.98;
-            break;
-        case (valorImovel <= 1030000.00):
-            valorRegistro = 11640.86;
-            break;
-        case (valorImovel <= 1035000.00):
-            valorRegistro = 11694.74;
-            break;
-        case (valorImovel <= 1040000.00):
-            valorRegistro = 11748.62;
-            break;
-        case (valorImovel <= 1045000.00):
-            valorRegistro = 11802.50;
-            break;
-        case (valorImovel <= 1050000.00):
-            valorRegistro = 11856.38;
-            break;
-        case (valorImovel <= 1055000.00):
-            valorRegistro = 11910.26;
-            break;
-        case (valorImovel <= 1060000.00):
-            valorRegistro = 11964.14;
-            break;
-        case (valorImovel <= 1065000.00):
-            valorRegistro = 12018.02;
-            break;
-        case (valorImovel <= 1070000.00):
-            valorRegistro = 12071.90;
-            break;
-        case (valorImovel <= 1075000.00):
-            valorRegistro = 12125.78;
-            break;
-        case (valorImovel <= 1080000.00):
-            valorRegistro = 12179.66;
-            break;
-        case (valorImovel <= 1085000.00):
-            valorRegistro = 12233.54;
-            break;
-        case (valorImovel <= 1090000.00):
-        default:
-            valorRegistro = 12244.60;
-            break;
-    }
-     // Aumentar o valorRegistro referente reajuste anual da tambela de emoumento 
-     // (multiplicar por 1.04825) valor atualizado do ano 2025
-    valorRegistro = valorRegistro * 1.04825; 
-
-    // O valor resultante será usado para preencher os campos de registro e notas.
-
-    // **********************************************
-    // 2. ATRIBUIÇÃO: Preencher os campos com o novo valor majorado (formatado)
-    // **********************************************
-    document.getElementById('registro').value = valorRegistro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('notas').value = valorRegistro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
-
-// Função para calcular o total
-function calc() {
-    // CORREÇÃO APLICADA: Usando a nova função parseCurrency para obter valores numéricos
-    let valorImovel = parseCurrency(document.getElementById('valorImovel').value);
-    let registro = parseCurrency(document.getElementById('registro').value);
-    let notas = parseCurrency(document.getElementById('notas').value);
+// CORRIGIDO: Exibe o alerta do regime com quebra de linha adequada
+function exibirAlertaRegime() {
+    const regime = document.getElementById('regimeBens').value;
+    const alerta = document.getElementById('alertaRegime');
     
-    // O campo percentual não deve estar formatado como moeda, então a leitura original é aceitável, mas padronizada para segurança:
-    let percentual = parseFloat(document.getElementById('percentual').value.replace(',', '.')) || 0; 
+    // Altera a classe de fundo para o alerta dinâmico (usa alerta-regime para cores específicas)
+    alerta.className = 'alerta-regime'; 
 
-    // Calculando o valor da porcentagem aplicada ao valor do imóvel
-    let valorPercentual = (valorImovel * percentual) / 100;
-
-    // Calculando o total somando os valores adicionais
-    let total = valorPercentual + registro + notas;
-
-    // Exibindo o resultado no campo de total
-    document.getElementById('total').value = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    if (regime === 'separacao' || regime === 'separacao-obrigatoria') {
+        alerta.style.display = 'block';
+        alerta.innerHTML = `
+            ℹ️ **Atenção ao Regime de Separação:** Todos os bens são tratados como **exclusivos** do falecido e compõem 100% da **BASE DE HERANÇA**.
+        `;
+    } else if (regime === 'universal') {
+         alerta.style.display = 'block';
+         alerta.innerHTML = `
+            ℹ️ **Atenção ao Regime Universal:** Não existe bem particular. Os **Bens Particulares** digitados serão **SOMADOS** aos Bens Comuns para o cálculo da meação total (50%) e da herança (50% restante). O cônjuge **NÃO** concorre com descendentes na herança.
+        `;
+    } 
+    else {
+        alerta.style.display = 'none';
+    }
 }
+        
+        function calcularITCMD(valorQuinhao) {
+            let aliquota = 0;
+            let imposto = 0;
+            
+            if (valorQuinhao <= 50000) {
+                aliquota = 0;
+            } else if (valorQuinhao <= 250000) {
+                aliquota = 0.02; // 2%
+            } else if (valorQuinhao <= 500000) {
+                aliquota = 0.04; // 4%
+            } else {
+                aliquota = 0.06; // 6%
+            }
+
+            imposto = valorQuinhao * aliquota;
+
+            return { aliquota: (aliquota * 100).toFixed(2), imposto: imposto };
+        }
+        
+        function gerarCamposNomes() {
+            const numComuns = parseInt(document.getElementById('numDescComuns').value) || 0;
+            const numExclusivos = parseInt(document.getElementById('numDescExclusivos').value) || 0;
+            const numColaterais = parseInt(document.getElementById('numColaterais').value) || 0;
+            const divDescendentes = document.getElementById('nomesDescendentes');
+            const divColaterais = document.getElementById('nomesColaterais');
+            
+            // 1. PRESERVAR VALORES ATUAIS
+            let nomesSalvos = new Map();
+            let i = 1;
+            while (document.getElementById(`descNome${i}`)) {
+                nomesSalvos.set(`descNome${i}`, document.getElementById(`descNome${i}`).value);
+                i++;
+            }
+            i = 1;
+            while (document.getElementById(`colatNome${i}`)) {
+                nomesSalvos.set(`colatNome${i}`, document.getElementById(`colatNome${i}`).value);
+                i++;
+            }
+            
+            // GERAÇÃO DOS NOVOS CAMPOS DE DESCENDENTES
+            let htmlDesc = '<h4>Filhos (Descendentes):</h4><div class="desc-grid">';
+            let totalDesc = 0;
+            for (let i = 1; i <= numComuns; i++) {
+                totalDesc++;
+                const id = `descNome${totalDesc}`;
+                const nomeSalvo = nomesSalvos.get(id) || `Filho Comum ${i}`;
+                htmlDesc += `<div class="input-group"><label for="${id}">Filho Comum ${i}:</label><input type="text" id="${id}" value="${nomeSalvo}"></div>`;
+            }
+            for (let i = 1; i <= numExclusivos; i++) {
+                totalDesc++;
+                const id = `descNome${totalDesc}`;
+                const nomeSalvo = nomesSalvos.get(id) || `Filho Exclusivo ${i}`;
+                htmlDesc += `<div class="input-group"><label for="${id}">Filho Exclusivo ${i}:</label><input type="text" id="${id}" value="${nomeSalvo}"></div>`;
+            }
+            htmlDesc += '</div>';
+            
+            if (totalDesc === 0) {
+                divDescendentes.innerHTML = `<p style="margin-top: 10px; color: #777;">Nenhum descendente cadastrado.</p>`;
+            } else {
+                divDescendentes.innerHTML = htmlDesc;
+            }
+
+            // GERAÇÃO DOS NOVOS CAMPOS DE COLATERAIS (Irmãos)
+            let htmlColat = '<h4>Irmãos (Colaterais):</h4><div class="desc-grid">';
+            for (let i = 1; i <= numColaterais; i++) {
+                const id = `colatNome${i}`;
+                const nomeSalvo = nomesSalvos.get(id) || `Irmão ${i}`;
+                htmlColat += `<div class="input-group"><label for="${id}">Irmão ${i}:</label><input type="text" id="${id}" value="${nomeSalvo}"></div>`;
+            }
+            htmlColat += '</div>';
+
+            if (numColaterais === 0) {
+                 divColaterais.innerHTML = `<p style="margin-top: 10px; color: #777;">Nenhum colateral cadastrado.</p>`;
+            } else {
+                divColaterais.innerHTML = htmlColat;
+            }
+        }
+        
+        function inicializarInputs() {
+            const inputsValor = ['bensComuns', 'bensParticulares', 'dividas'];
+            inputsValor.forEach(id => {
+                const input = document.getElementById(id);
+                formatarInput(input);
+            });
+            exibirAlertaRegime();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             gerarCamposNomes();
+             inicializarInputs();
+        });
+
+
+        function calcularPartilhaCompleta() {
+            // Coleta de Dados: TODOS OS VALORES DE INPUT SÃO DESFORMATADOS PARA O CÁLCULO
+            const nomeSobrevivente = document.getElementById('nomeSobrevivente').value.trim() || (document.getElementById('tipoRelacao').value === 'conjuge' ? 'Cônjuge Sobrevivente' : 'Companheiro(a) Sobrevivente');
+            const tipoRelacao = document.getElementById('tipoRelacao').value;
+            const regime = document.getElementById('regimeBens').value;
+            
+            // DADOS DESFORMATADOS PARA CÁLCULO
+            let bensComunsBruto = desformatarBRL(document.getElementById('bensComuns').value);
+            let bensParticularesBruto = desformatarBRL(document.getElementById('bensParticulares').value);
+            const dividas = desformatarBRL(document.getElementById('dividas').value);
+            
+            const numDescComuns = parseInt(document.getElementById('numDescComuns').value) || 0;
+            const numDescExclusivos = parseInt(document.getElementById('numDescExclusivos').value) || 0;
+            const numAscendentes = parseInt(document.getElementById('paisVivos').value) || 0;
+            const numColaterais = parseInt(document.getElementById('numColaterais').value) || 0;
+
+            const totalDescendentes = numDescComuns + numDescExclusivos;
+
+            const tabelaCorpo = document.getElementById('tabelaCorpo');
+            const tabelaITCMD = document.getElementById('tabelaITCMD');
+            const resultadoDiv = document.getElementById('resultado');
+            const infoDeducoes = document.getElementById('infoDeducoes');
+            const infoPatrimonio = document.getElementById('infoPatrimonio');
+            const infoHeranca = document.getElementById('infoHeranca');
+            const totalImpostoElement = document.getElementById('totalImposto');
+            
+            // Variáveis de Saída
+            let partilha = []; 
+            let meacaoCnjValor = 0;
+            let herancaLiquida = 0;
+            let bensComunsLiquido = 0;
+            let bensParticularesLiquido = 0;
+
+            // --- TRATAMENTO INICIAL PARA COERÊNCIA LEGAL ---
+            let totalEspolioBruto = bensComunsBruto + bensParticularesBruto;
+            
+            if (regime === 'universal') {
+                // CORREÇÃO: Força tudo a ser "comum" para fins de cálculo de meação e herança.
+                bensComunsBruto = totalEspolioBruto;
+                bensParticularesBruto = 0;
+            }
+            // A variável totalEspolioBruto continua a soma inicial para a base do percentual
+
+            // --- FASE 1: TRATAMENTO DE DÍVIDAS (Dedução) ---
+            
+            if (totalEspolioBruto < dividas) {
+                alert('As dívidas são maiores que o Espólio Bruto. Não há herança líquida.');
+                infoDeducoes.innerHTML = `**Espólio Total: ${formatarBRL(totalEspolioBruto)}**. **Dívidas: ${formatarBRL(dividas)}**. Não há herança líquida.`;
+                resultadoDiv.style.display = 'block';
+                tabelaCorpo.innerHTML = '';
+                tabelaITCMD.innerHTML = '';
+                return;
+            }
+
+            // Garante que o cálculo das dívidas usa a nova base de bensComunsBruto e bensParticularesBruto
+            const ratioComum = bensComunsBruto / totalEspolioBruto;
+            const ratioParticular = bensParticularesBruto / totalEspolioBruto;
+
+            const divComum = dividas * ratioComum;
+            const divParticular = dividas * ratioParticular;
+
+            bensComunsLiquido = bensComunsBruto - divComum;
+            bensParticularesLiquido = bensParticularesBruto - divParticular;
+            
+            const totalEspolioLiquido = bensComunsLiquido + bensParticularesLiquido;
+
+            infoDeducoes.innerHTML = `**Dívidas (${formatarBRL(dividas)})** deduzidas. Espólio Líquido total: **${formatarBRL(totalEspolioLiquido)}** (Comuns: ${formatarBRL(bensComunsLiquido)} | Particulares: ${formatarBRL(bensParticularesLiquido)})`;
+
+            // --- FASE 2: CÁLCULO DA MEAÇÃO ---
+            
+            switch (regime) {
+                case 'universal':
+                    // Agora, bensComunsLiquido É O TOTAL.
+                    meacaoCnjValor = bensComunsLiquido / 2;
+                    herancaLiquida = bensComunsLiquido - meacaoCnjValor; 
+                    infoPatrimonio.innerHTML = `Regime Universal: Meação de **${formatarBRL(meacaoCnjValor)}** (50% do Espólio Líquido).`;
+                    break;
+
+                case 'parcial':
+                    meacaoCnjValor = bensComunsLiquido / 2;
+                    herancaLiquida = (bensComunsLiquido / 2) + bensParticularesLiquido;
+                    infoPatrimonio.innerHTML = `Regime Parcial: Meação de **${formatarBRL(meacaoCnjValor)}** (50% dos Comuns Líquidos).`;
+                    break;
+
+                case 'separacao':
+                    meacaoCnjValor = 0;
+                    herancaLiquida = totalEspolioLiquido;
+                    infoPatrimonio.innerHTML = `Regime Separação Total Convencional: **Não há meação**.`;
+                    break;
+                
+                case 'separacao-obrigatoria':
+                    meacaoCnjValor = 0;
+                    herancaLiquida = totalEspolioLiquido;
+                    infoPatrimonio.innerHTML = `<span class="alerta">Regime Separação Obrigatória: **Não há meação legal**. Contudo, bens adquiridos por esforço comum (Súmula 377) podem gerar meação (aqui calculados na herança).</span>`;
+                    break;
+            }
+
+            // --- FASE 3: ORDEM DE VOCAÇÃO HEREDITÁRIA (Cálculo da Herança) ---
+            
+            let cnjHerancaValor = 0;
+            let herancaDistribuir = herancaLiquida;
+            let classeHerdeira = "Nenhuma";
+
+            partilha = [];
+            
+            function getDescendenteNome(index) {
+                return document.getElementById(`descNome${index}`).value.trim() || `Descendente ${index}`;
+            }
+            function getColateralNome(index) {
+                return document.getElementById(`colatNome${index}`).value.trim() || `Irmão ${index}`;
+            }
+
+            // 3.1 - Concorrência com Descendentes (1ª Classe)
+            if (totalDescendentes > 0) {
+                
+                let concorreHeranca = 0; 
+                let herancaPuraDescendentes = 0; // Herança que não tem concorrência do cônjuge
+
+                if (regime === 'universal' || regime === 'separacao-obrigatoria') {
+                    // Cônjuge NÃO CONCORRE com descendentes (Art. 1829, I). 100% da herança líquida vai para os descendentes.
+                    herancaPuraDescendentes = herancaLiquida; 
+                    classeHerdeira = "Descendentes (S/ Cônjuge - Universal/Sep. Obrigatória)"; 
+                } 
+                else if (regime === 'parcial') {
+                    const herancaBensParticulares = bensParticularesLiquido;
+                    herancaPuraDescendentes = bensComunsLiquido / 2; // 50% dos bens comuns do falecido
+                    
+                    if (herancaBensParticulares === 0) {
+                        concorreHeranca = 0; // Cônjuge só concorre se houver bens particulares
+                        classeHerdeira = "Descendentes (S/ Cônjuge - Parcial S/ Particulares)";
+                    } else {
+                        concorreHeranca = herancaBensParticulares; // Herança sobre os particulares, com concorrência
+                        classeHerdeira = "Descendentes (Cônjuge Conc. em Particulares)";
+                    }
+                } else if (regime === 'separacao') {
+                    concorreHeranca = herancaLiquida; // Cônjuge concorre sobre 100%
+                    classeHerdeira = "Descendentes (Cônjuge Conc. - Separação Total)";
+                }
+                
+                // Distribuição da herança Pura para Descendentes
+                if (herancaPuraDescendentes > 0) {
+                    const quinhaoPuro = herancaPuraDescendentes / totalDescendentes;
+                    for (let i = 1; i <= totalDescendentes; i++) {
+                        partilha.push({ nome: getDescendenteNome(i), tipo: 'Herança Total/Comum', valor: quinhaoPuro });
+                    }
+                    herancaDistribuir -= herancaPuraDescendentes; 
+                }
+
+                // Cálculo da concorrência (se o cônjuge tiver direito - Parcial com particulares, ou Separação Total)
+                if (concorreHeranca > 0) {
+                    let totalHerdeirosConcorrentes = totalDescendentes + 1; 
+                    let quinhaoFilhoConcorrente = 0;
+                    
+                    if (numDescExclusivos >= 1 && totalHerdeirosConcorrentes >= 4) {
+                        cnjHerancaValor = concorreHeranca * 0.25;
+                        let herancaFilhos = concorreHeranca - cnjHerancaValor;
+                        quinhaoFilhoConcorrente = herancaFilhos / totalDescendentes;
+                    } else {
+                        cnjHerancaValor = concorreHeranca / totalHerdeirosConcorrentes;
+                        quinhaoFilhoConcorrente = cnjHerancaValor;
+                    }
+                    
+                    // Adiciona a herança concorrente aos descendentes (somando ao que já pode ter sido herdado)
+                    for (let i = 1; i <= totalDescendentes; i++) {
+                        const descIndex = partilha.findIndex(p => p.nome === getDescendenteNome(i));
+                        if(descIndex !== -1) {
+                            partilha[descIndex].valor += quinhaoFilhoConcorrente;
+                        } else {
+                             // Caso em que o herdeiro só herdou por concorrência (teoricamente não deve ocorrer)
+                            partilha.push({ nome: getDescendenteNome(i), tipo: 'Herança (Concorrência)', valor: quinhaoFilhoConcorrente });
+                        }
+                    }
+                    
+                    herancaDistribuir -= concorreHeranca;
+                }
+
+                if (cnjHerancaValor > 0) {
+                    partilha.push({ nome: nomeSobrevivente, tipo: 'Herança (Concorrência)', valor: cnjHerancaValor });
+                }
+                
+                // Verifica se houve distribuição completa para Descendentes (necessário após a refatoração)
+                if (partilha.length === 0 && herancaLiquida > 0 && totalDescendentes > 0) {
+                     // Isso só deve acontecer se herancaPuraDescendentes for herancaLiquida (Universal/Sep. Obrigatória)
+                     const quinhaoDescendente = herancaLiquida / totalDescendentes;
+                     for (let i = 1; i <= totalDescendentes; i++) {
+                          partilha.push({ nome: getDescendenteNome(i), tipo: 'Herança Total', valor: quinhaoDescendente });
+                     }
+                     herancaDistribuir = 0;
+                }
+            }
+
+            // 3.2 - Concorrência com Ascendentes (2ª Classe)
+            else if (numAscendentes > 0) {
+                classeHerdeira = "Ascendentes (Cônjuge Conc.)";
+                
+                let quinhaoCnj = 0;
+                if (numAscendentes === 2) { 
+                    quinhaoCnj = herancaDistribuir / 3;
+                    let herancaAscendentes = herancaDistribuir * (2 / 3);
+                    
+                    const quinhaoAscendente = herancaAscendentes / numAscendentes;
+                    partilha.push({ nome: `Ascendente 1 (Pai/Mãe)`, tipo: 'Herança', valor: quinhaoAscendente });
+                    partilha.push({ nome: `Ascendente 2 (Pai/Mãe)`, tipo: 'Herança', valor: quinhaoAscendente });
+                } else { 
+                    quinhaoCnj = herancaDistribuir / 2;
+                    partilha.push({ nome: `Ascendente 1 (Pai ou Mãe)`, tipo: 'Herança', valor: quinhaoCnj });
+                } 
+                
+                cnjHerancaValor = quinhaoCnj;
+                herancaDistribuir = 0;
+                
+                partilha.push({ nome: nomeSobrevivente, tipo: 'Herança (Concorrência)', valor: cnjHerancaValor });
+
+            }
+            
+            // 3.3 - Apenas Cônjuge/Companheiro (3ª Classe)
+            else if (tipoRelacao !== 'nenhum') { 
+                classeHerdeira = tipoRelacao === 'conjuge' ? "Cônjuge (Herança Total)" : "Companheiro(a) (Herança Total)";
+                cnjHerancaValor = herancaDistribuir;
+                herancaDistribuir = 0;
+                
+                partilha.push({ nome: nomeSobrevivente, tipo: 'Herança (Total)', valor: cnjHerancaValor });
+            }
+
+            // 3.4 - Colaterais (4ª Classe)
+            else if (numColaterais > 0) {
+                classeHerdeira = "Colaterais (Irmãos)";
+                const quinhaoColateral = herancaDistribuir / numColaterais;
+                for (let i = 1; i <= numColaterais; i++) {
+                    partilha.push({ nome: getColateralNome(i), tipo: 'Herança', valor: quinhaoColateral });
+                }
+                herancaDistribuir = 0;
+            }
+            
+            // Informação de Herança (mantida)
+            infoHeranca.innerHTML = `**Ordem de Vocação Hereditária:** ${classeHerdeira}. Herança Líquida a distribuir: **${formatarBRL(herancaLiquida)}** (foi distribuído **${formatarBRL(herancaLiquida - herancaDistribuir)}**).`;
+
+
+            // --- FASE 4: MONTAGEM DA TABELA DE PARTILHA E CÁLCULO DO ITCMD ---
+            
+            tabelaCorpo.innerHTML = '';
+            tabelaITCMD.innerHTML = '';
+            let totalDistribuido = meacaoCnjValor;
+            let totalITCMD = 0;
+
+            // 4.1. Adiciona a linha da Meação (se houver)
+            if (meacaoCnjValor > 0) {
+                const meacaoPercentual = (meacaoCnjValor / totalEspolioBruto) * 100;
+                tabelaCorpo.innerHTML += `
+                    <tr class="meacao">
+                        <td>**${nomeSobrevivente}**</td>
+                        <td>Meação (Direito Próprio)</td>
+                        <td>${formatarBRL(meacaoCnjValor)}</td>
+                        <td>${meacaoPercentual.toFixed(2)}%</td>
+                        <td>R$ 0,00 (Não Tributável)</td>
+                    </tr>
+                `;
+            }
+
+            // 4.2. Adiciona as linhas da Herança e Calcula o ITCMD
+            partilha.forEach(item => {
+                const itemPercentual = (item.valor / totalEspolioBruto) * 100;
+                const valorTributavel = item.valor; 
+                
+                const resultadoITCMD = calcularITCMD(valorTributavel);
+                const impostoDevido = resultadoITCMD.imposto;
+                const aliquotaAplicada = resultadoITCMD.aliquota;
+
+                totalDistribuido += item.valor;
+                totalITCMD += impostoDevido;
+
+                // Tabela de Partilha (1)
+                tabelaCorpo.innerHTML += `
+                    <tr>
+                        <td>${item.nome}</td>
+                        <td>${item.tipo}</td>
+                        <td>${formatarBRL(item.valor)}</td>
+                        <td>${item.valor > 0 ? itemPercentual.toFixed(2) + '%' : '0.00%'}</td>
+                        <td>${formatarBRL(valorTributavel)}</td>
+                    </tr>
+                `;
+
+                // Tabela de ITCMD (2)
+                tabelaITCMD.innerHTML += `
+                    <tr>
+                        <td>${item.nome}</td>
+                        <td>${formatarBRL(valorTributavel)}</td>
+                        <td>${aliquotaAplicada}%</td>
+                        <td>${formatarBRL(impostoDevido)}</td>
+                    </tr>
+                `;
+            });
+            
+            // 4.3. Linha Total
+             const totalPercentual = (totalDistribuido / totalEspolioBruto) * 100;
+             tabelaCorpo.innerHTML += `
+                <tr class="heranca-total">
+                    <td>**TOTAL**</td>
+                    <td></td>
+                    <td>**${formatarBRL(totalDistribuido)}**</td>
+                    <td>**${totalPercentual.toFixed(2)}%**</td>
+                    <td></td>
+                </tr>
+            `;
+            
+            // 4.4. Total do Imposto
+            totalImpostoElement.innerHTML = `**Total Estimado de ITCMD/SE (a ser recolhido pelo Espólio/Herdeiros): ${formatarBRL(totalITCMD)}**`;
+
+
+            resultadoDiv.style.display = 'block';
+        }
