@@ -115,7 +115,7 @@ input:focus {
 #total1:hover { background-color: #0056b3; }
 
 /* Campos automáticos */
-#registro, #notas {
+#registro, #notas, #valorPercentual {
     background-color: #f8f9fa;
 }
 
@@ -144,3 +144,4 @@ input:focus {
     p { margin-bottom: 20px; }
     hr { margin: 25px 0; }
 }
+
