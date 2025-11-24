@@ -715,4 +715,6 @@ function calc() {
 
     // Exibindo o resultado no campo de total
     document.getElementById('total').value = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('valorPercentual').value = valorPercentual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
+
